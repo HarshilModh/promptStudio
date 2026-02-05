@@ -1,0 +1,17 @@
+name: promptstudio
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: promptstudio-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: promptstudio
+    ports:
+      - "5431:5432"
+    volumes:
+      - promptstudio-db-data:/var/lib/postgresql
+
+volumes:
+  promptstudio-db-data:

@@ -1,0 +1,17 @@
+# This is a config for E2B sandbox template.
+# You can use template ID (vfew3quta1ou3lm7nxub) or template name (prompt-studio-nextjs-template) to create a sandbox:
+
+# Python SDK
+# from e2b import Sandbox, AsyncSandbox
+# sandbox = Sandbox.create("prompt-studio-nextjs-template") # Sync sandbox
+# sandbox = await AsyncSandbox.create("prompt-studio-nextjs-template") # Async sandbox
+
+# JS SDK
+# import { Sandbox } from 'e2b'
+# const sandbox = await Sandbox.create('prompt-studio-nextjs-template')
+
+team_id = "de76306d-df9e-4f48-95ac-e2bb2ec4d250"
+start_cmd = "/compile_page.sh"
+dockerfile = "e2b.Dockerfile"
+template_name = "prompt-studio-nextjs-template"
+template_id = "vfew3quta1ou3lm7nxub"
