@@ -1,8 +1,10 @@
 "use server"
 import { getCurrentUser } from "@/modules/auth/actions"
 import db from "@/lib/db";
-import { Inngest } from "@/inngest/client"
+import { inngest } from "@/inngest/client"
 import { MessageRole, MessageType } from "@prisma/client";
+import { consumeCredits } from "@/lib/usage";
+import { th } from "date-fns/locale";
 
 export const createMessage = async (value, projectId) => {
     const user = await getCurrentUser()
@@ -14,16 +16,31 @@ export const createMessage = async (value, projectId) => {
         }
     })
     if (!project) return { error: "Project not found" }
+    try{
+        await consumeCredits();
+    }
+    catch(err) {
+        if(err instanceof Error){
+            throw new Error({
+                code:"bad_request",
+                message:"Something went wrong while consuming credits",
+            });   
+        }else{
+            throw new Error({
+                code:"TOO_MANY_REQUESTS",
+                message:"You have exhausted your credits. Please wait before making more requests.",
+            });
+        }
+    }
     const newMessage = await db.message.create({
         data: {
             content: value,
             projectId,
-            userId: user.id,
             role: MessageRole.USER,
             type: MessageType.RESULT
         }
     })
-    await Inngest.send({
+    await inngest.send({
         name: "code-agent/run",
         data: {
             value: value,

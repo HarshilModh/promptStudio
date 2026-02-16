@@ -12,4 +12,5 @@ const db = globalThis.prisma || new PrismaClient({ adapter, log: ['query', 'info
 if (process.env.NODE_ENV === "development") {
     globalThis.prisma = db;
 }
+console.log("DB Initialized:", !!db);
 export default db;
