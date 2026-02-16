@@ -1,106 +1,109 @@
-# Prompt Studio 🚀
+# PromptStudio 🚀
 
-**Prompt Studio** is a cutting-edge, AI-powered full-stack application builder that empowers users to generate fully functional Next.js applications through natural language interactions. By leveraging advanced LLMs and a secure sandboxed environment, it bridges the gap between idea and implementation, offering real-time code generation and live previews.
+**PromptStudio** is a next-generation AI-powered development environment that bridges the gap between natural language prompts and executable full-stack applications. By orchestrating autonomous AI agents with secure cloud sandboxes, it allows developers to generate, preview, and iterate on React applications in real-time.
 
----
+![Next.js](https://img.shields.io/badge/Next.js-16.1-black)
+![React](https://img.shields.io/badge/React-19-blue)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-teal)
+![Inngest](https://img.shields.io/badge/Orchestration-Inngest-darkblue)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-## 🛠️ Tech Stack
+## 📖 Table of Contents
 
-Built with the latest web technologies to ensure performance, scalability, and developer experience:
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Tech Stack](#-tech-stack)
+- [Architecture](#-architecture)
+- [Getting Started](#-getting-started)
+- [Database Schema](#-database-schema)
 
--   **Framework:** [Next.js 15](https://nextjs.org/) (App Router, Server Actions, Turbo)
--   **Language:** [TypeScript](https://www.typescriptlang.org/) / JavaScript
--   **AI & Agents:** [Vercel AI SDK](https://sdk.vercel.ai/docs), Custom Multi-Agent System
--   **Sandboxing:** [e2b](https://e2b.dev/) (Code Interpreter & Sandboxed Execution)
--   **Database:** [PostgreSQL](https://www.postgresql.org/) with [Prisma ORM](https://www.prisma.io/)
--   **Authentication:** [Clerk](https://clerk.com/)
--   **Styling:** [Tailwind CSS](https://tailwindcss.com/) & [Shadcn UI](https://ui.shadcn.com/)
--   **State Management:** React Query (TanStack Query)
--   **Background Jobs:** [Inngest](https://www.inngest.com/)
+## 💡 Overview
 
----
+PromptStudio is not just a code generator; it is a **live execution environment**. It leverages **E2B Code Interpreters** to spin up isolated sandboxes where generated code is actually run and rendered. Complex AI workflows—including planning, coding, and summarizing—are managed durably via **Inngest**, ensuring reliability even during long-running tasks.
 
 ## ✨ Key Features
 
-### 🤖 AI-Driven Development
--   **Chat-to-App Interface:** Interact with an intelligent agent to describe your application requirements.
--   **Multi-Agent Architecture:** Utilizes specialized agents for planning, coding, and summarizing tasks to ensure high-quality output.
--   **Context-Aware Generation:** Understands project context to make relevant code modifications.
+* **🤖 Autonomous Coding Agents**: Uses the Inngest Agent Kit to deploy specific agents for coding, terminal execution, and file management.
+* **📦 Secure Cloud Sandboxing**: Instantly provisions **E2B** sandboxes (`prompt-studio-nextjs-template`) to execute and test untrusted code in isolation.
+* **⚡ Real-Time Preview**: Renders generated React components directly in the browser via a live sandbox URL.
+* **🔄 Durable Workflows**: "Agentic" workflows are event-driven and state-managed, capable of recovering from failures and managing long context windows.
+* **🗄️ Project & History Management**: Complete chat history and code fragment versioning backed by PostgreSQL.
+* **🔐 Enterprise-Grade Auth**: Secure authentication and user management provided by **Clerk**.
 
-### ⚡ Real-Time Preview & Sandboxing
--   **Live Code Rendering:** Instantly view the generated React components and applications in a secure, isolated sandbox.
--   **Secure Execution:** Code is executed in a controlled environment to prevent security risks.
+## 🛠 Tech Stack
 
-### 📦 Project Management
--   **Workspace Organization:** Manage multiple projects with ease.
--   **History & Versioning:** Track changes and revert to previous iterations of your generated apps.
+### Frontend & Core
+* **Framework**: Next.js 16 (App Router)
+* **UI Library**: React 19
+* **Styling**: Tailwind CSS v4, Radix UI, Lucide React
+* **State**: TanStack Query
 
-### 🔐 Enterprise-Grade Basics
--   **Secure Authentication:** Robust user management via Clerk.
--   **Usage Tracking:** Credit-based system to manage API usage and resource consumption.
+### Backend & Infrastructure
+* **Database**: PostgreSQL (via Prisma ORM)
+* **Authentication**: Clerk
+* **AI Orchestration**: Inngest
+* **Sandboxing**: E2B Code Interpreter
+* **AI SDK**: Vercel AI SDK
 
----
+## 🏗 Architecture
+
+The system is built on an event-driven architecture defined in `src/inngest/function.js`:
+
+1.  **Event Trigger**: A user prompt triggers the `code-agent/run` event.
+2.  **Context Loading**: The workflow fetches historical messages from the `Message` table to maintain conversation context.
+3.  **Sandbox Initialization**: An E2B sandbox is created to serve as the runtime environment.
+4.  **Agent Execution Loop**:
+    * **Coding Agent**: Writes code and executes terminal commands.
+    * **Tool Use**: Utilizes custom tools like `createOrUpdateFiles`, `readFiles`, and `terminal` to manipulate the sandbox.
+5.  **Result Capture**: Generated code fragments and the live sandbox URL are stored in the `Fragment` table.
+
+## 🗄 Database Schema
+
+* **User**: Stores identity and links to Clerk.
+* **Project**: Groups related conversations and code fragments.
+* **Message**: Stores the chat history (User/Assistant) and links to code results.
+* **Fragment**: Represents a specific version of generated code, linked to a sandbox URL.
 
 ## 🚀 Getting Started
 
-Follow these steps to set up the project locally for review:
-
 ### Prerequisites
-
--   Node.js (v18+)
--   Docker (for local PostgreSQL database)
--   npm or pnpm
+* Node.js 18+
+* PostgreSQL (or Docker to run it locally)
+* Keys for: Clerk, E2B, OpenAI/Gemini
 
 ### Installation
 
-1.  **Clone the repository:**
+1.  **Clone the repo**
     ```bash
-    git clone https://github.com/yourusername/promptstudio.git
+    git clone [https://github.com/yourusername/promptstudio.git](https://github.com/yourusername/promptstudio.git)
     cd promptstudio
     ```
 
-2.  **Install dependencies:**
+2.  **Install dependencies**
     ```bash
     npm install
-    # or
-    pnpm install
     ```
 
-3.  **Set up Environment Variables:**
-    Create a `.env` file in the root directory and configure the necessary keys (Clerk, Database URL, OpenAI/Anthropic API keys, etc.).
+3.  **Setup Environment**
+    Create a `.env` file and configure `DATABASE_URL`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `E2B_API_KEY`, and `INNGEST_SIGNING_KEY`.
+
+4.  **Run Migrations**
     ```bash
-    cp .env.example .env
+    npx prisma migrate dev
     ```
 
-4.  **Initialize the Database:**
-    ```bash
-    npx prisma generate
-    npx prisma db push
-    ```
+5.  **Start Development Servers**
+    You need to run both the Next.js app and the Inngest Dev Server.
 
-5.  **Run the Development Server:**
+    **Terminal 1: Start App & Database**
     ```bash
     npm run dev
     ```
+    *(This runs `docker compose up -d && next dev`)*
 
-    Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
----
-
-## 📂 Project Structure
-
--   `src/app`: Next.js App Router structure.
--   `src/components`: Reusable UI components (Shadcn + Custom).
--   `src/modules`: Domain-driven feature modules (Home, Projects, Auth, etc.).
--   `src/lib`: Utility functions and shared logic.
--   `prisma`: Database schema and migrations.
-
----
-
-## 🤝 Contribution
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
----
-
-*This project is a demonstration of modern AI engineering capabilities, integrating complex state management, real-time streaming, and sandboxed code execution.*
+    **Terminal 2: Start Inngest Dev Server**
+    ```bash
+    npx inngest-cli@latest dev
+    ```
+    * Open [http://localhost:3000](http://localhost:3000) to view the app.
+    * Open [http://localhost:8288](http://localhost:8288) to view the Inngest dashboard.
