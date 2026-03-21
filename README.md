@@ -114,4 +114,6 @@ The system is built on an event-driven architecture defined in `src/inngest/func
 
 Contributions are welcome. If you want to improve setup, developer experience, documentation, or core workflows, please review       CONTRIBUTING.md before opening a pull request.
 
+📄 License
 
+This project is licensed under the MIT License.
