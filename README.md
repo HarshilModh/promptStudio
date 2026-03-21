@@ -16,10 +16,12 @@
 - [Architecture](#-architecture)
 - [Getting Started](#-getting-started)
 - [Database Schema](#-database-schema)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ## 💡 Overview
 
-PromptStudio is not just a code generator; it is a **live execution environment**. It leverages **E2B Code Interpreters** to spin up isolated sandboxes where generated code is actually run and rendered. Complex AI workflows—including planning, coding, and summarizing—are managed durably via **Inngest**, ensuring reliability even during long-running tasks.
+PromptStudio is not just a code generator. It is a **live execution environment** built to make AI-assisted application development more structured, reproducible, and developer-friendly. It leverages **E2B Code Interpreters** to spin up isolated sandboxes where generated code is actually run and rendered. Complex AI workflows including planning, coding, and summarizing are managed durably via **Inngest**, ensuring reliability even during long-running tasks.
 
 ## ✨ Key Features
 
@@ -49,19 +51,19 @@ PromptStudio is not just a code generator; it is a **live execution environment*
 
 The system is built on an event-driven architecture defined in `src/inngest/function.js`:
 
-1.  **Event Trigger**: A user prompt triggers the `code-agent/run` event.
-2.  **Context Loading**: The workflow fetches historical messages from the `Message` table to maintain conversation context.
-3.  **Sandbox Initialization**: An E2B sandbox is created to serve as the runtime environment.
-4.  **Agent Execution Loop**:
-    * **Coding Agent**: Writes code and executes terminal commands.
-    * **Tool Use**: Utilizes custom tools like `createOrUpdateFiles`, `readFiles`, and `terminal` to manipulate the sandbox.
-5.  **Result Capture**: Generated code fragments and the live sandbox URL are stored in the `Fragment` table.
+1. **Event Trigger**: A user prompt triggers the `code-agent/run` event.
+2. **Context Loading**: The workflow fetches historical messages from the `Message` table to maintain conversation context.
+3. **Sandbox Initialization**: An E2B sandbox is created to serve as the runtime environment.
+4. **Agent Execution Loop**:
+   * **Coding Agent**: Writes code and executes terminal commands.
+   * **Tool Use**: Utilizes custom tools like `createOrUpdateFiles`, `readFiles`, and `terminal` to manipulate the sandbox.
+5. **Result Capture**: Generated code fragments and the live sandbox URL are stored in the `Fragment` table.
 
 ## 🗄 Database Schema
 
 * **User**: Stores identity and links to Clerk.
 * **Project**: Groups related conversations and code fragments.
-* **Message**: Stores the chat history (User/Assistant) and links to code results.
+* **Message**: Stores the chat history (User or Assistant) and links to code results.
 * **Fragment**: Represents a specific version of generated code, linked to a sandbox URL.
 
 ## 🚀 Getting Started
@@ -69,23 +71,23 @@ The system is built on an event-driven architecture defined in `src/inngest/func
 ### Prerequisites
 * Node.js 18+
 * PostgreSQL (or Docker to run it locally)
-* Keys for: Clerk, E2B, OpenAI/Gemini
+* Keys for: Clerk, E2B, OpenAI or Gemini
 
 ### Installation
 
-1.  **Clone the repo**
-    ```bash
-    git clone [https://github.com/yourusername/promptstudio.git](https://github.com/yourusername/promptstudio.git)
-    cd promptstudio
-    ```
-
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/HarshilModh/promptStudio.git
+   cd promptStudio
+   ```
+   
 2.  **Install dependencies**
     ```bash
     npm install
     ```
 
 3.  **Setup Environment**
-    Create a `.env` file and configure `DATABASE_URL`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `E2B_API_KEY`, and `INNGEST_SIGNING_KEY`.
+    Create a .env file using .env.example as a reference and configure values such as DATABASE_URL, NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,                CLERK_SECRET_KEY, E2B_API_KEY, and INNGEST_SIGNING_KEY.
 
 4.  **Run Migrations**
     ```bash
@@ -107,3 +109,9 @@ The system is built on an event-driven architecture defined in `src/inngest/func
     ```
     * Open [http://localhost:3000](http://localhost:3000) to view the app.
     * Open [http://localhost:8288](http://localhost:8288) to view the Inngest dashboard.
+
+🤝 Contributing
+
+Contributions are welcome. If you want to improve setup, developer experience, documentation, or core workflows, please review       CONTRIBUTING.md before opening a pull request.
+
+
