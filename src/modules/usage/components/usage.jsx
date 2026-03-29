@@ -38,8 +38,8 @@ export const Usage = () => {
             Resets in{" "}
             {formatDuration(
               intervalToDuration({
-                start: new Date(),
-                end: new Date(Date.now() + msBeforeNext),
+                start: 0,
+                end: msBeforeNext,
               }),
               { format: ["months", "days", "hours"] }
             )}

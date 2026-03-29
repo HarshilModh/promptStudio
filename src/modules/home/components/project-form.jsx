@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import TextAreaAutosize from "react-textarea-autosize";
@@ -95,7 +95,8 @@ const ProjectsForm = () => {
             toast.error(error.message||"Something went wrong")
         }
     }
-    const isButtonDisabled=isPending||!form.watch("content").trim()
+    const contentWatch = useWatch({ control: form.control, name: "content" }) || ""
+    const isButtonDisabled=isPending||!contentWatch.trim()
     return (
             <div className="space-y-8">
       {/* Template Grid */}

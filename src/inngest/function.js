@@ -7,7 +7,7 @@ import z from "zod";
 import { FRAGMENT_TITLE_PROMPT, PROMPT, RESPONSE_PROMPT } from "../../prompt";
 import { lastAssistantTextMessageContent } from "./util";
 
-const model = openai({ model: "gpt-5-mini" });
+const model = openai({ model: "gpt-4.1-mini" });
 export const codeAgent = inngest.createFunction(
     { id: "code-agent" },
     { event: "code-agent/run" },
