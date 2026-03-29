@@ -225,7 +225,7 @@ export const codeAgent = inngest.createFunction(
             const sandbox = await Sandbox.connect(sandboxId);
             const host = sandbox.getHost(3000);
 
-            return `http://${host}`
+            return `https://${host}`
         })
 
         await step.run("save-result", async () => {
